@@ -54,7 +54,6 @@ def serialize(payload: JsonDict, schema: typing.Dict, serialization_type: Serial
     """
     if serialization_type == AVRO:
         file_like_output: typing.Union[io.BytesIO, io.StringIO] = io.BytesIO()
-
         fastavro.schemaless_writer(file_like_output, schema, payload)
 
         value = file_like_output.getvalue()

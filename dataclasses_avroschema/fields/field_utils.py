@@ -21,11 +21,13 @@ __all__ = [
     "UUID",
     "DECIMAL",
     "RECORD",
+    "TIMEDELTA",
     "TIME_MILLIS",
     "TIME_MICROS",
     "TIMESTAMP_MILLIS",
     "TIMESTAMP_MICROS",
     "LOGICAL_DATE",
+    "LOGICAL_TIMEDELTA",
     "LOGICAL_TIME_MILIS",
     "LOGICAL_TIME_MICROS",
     "LOGICAL_DATETIME_MILIS",
@@ -34,6 +36,7 @@ __all__ = [
     "PYTHON_TYPE_TO_AVRO",
 ]
 
+TIMEDELTA = "timedelta"
 TIME_MILLIS = "time-millis"
 TIME_MICROS = "time-micros"
 TIMESTAMP_MILLIS = "timestamp-millis"
@@ -56,6 +59,7 @@ UUID = "uuid"
 DECIMAL = "decimal"
 RECORD = "record"
 LOGICAL_DATE = {"type": INT, "logicalType": DATE}
+LOGICAL_TIMEDELTA = {"type": DOUBLE, "logicalType": TIMEDELTA}
 LOGICAL_TIME_MILIS = {"type": INT, "logicalType": TIME_MILLIS}
 LOGICAL_TIME_MICROS = {"type": LONG, "logicalType": TIME_MICROS}
 LOGICAL_DATETIME_MILIS = {"type": LONG, "logicalType": TIMESTAMP_MILLIS}
@@ -95,5 +99,6 @@ PYTHON_TYPE_TO_AVRO = {
     datetime.date: {"type": INT, "logicalType": DATE},
     datetime.time: {"type": INT, "logicalType": TIME_MILLIS},
     datetime.datetime: {"type": LONG, "logicalType": TIMESTAMP_MILLIS},
+    datetime.timedelta: LOGICAL_TIMEDELTA,
     uuid.uuid4: {"type": STRING, "logicalType": UUID},
 }

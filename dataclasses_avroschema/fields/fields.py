@@ -8,6 +8,7 @@ import re
 import typing
 import uuid
 
+import fastavro
 from typing_extensions import get_args, get_origin
 
 from dataclasses_avroschema import (
@@ -19,6 +20,9 @@ from dataclasses_avroschema import (
 )
 from dataclasses_avroschema.faker import fake
 from dataclasses_avroschema.utils import is_pydantic_model
+
+fastavro.write.LOGICAL_WRITERS["double-timedelta"] = lambda x, *args, **kwargs: x.total_seconds()
+fastavro.read.LOGICAL_READERS["double-timedelta"] = lambda x, *args: datetime.timedelta(seconds=x)
 
 from . import field_utils
 from .base import Field
@@ -60,6 +64,7 @@ __all__ = [
     "DateField",
     "DatetimeField",
     "DatetimeMicroField",
+    "TimedeltaField",
     "TimeMilliField",
     "TimeMicroField",
     "UUIDField",
@@ -578,6 +583,26 @@ class DateField(ImmutableField):
 
 
 @dataclasses.dataclass
+class TimedeltaField(ImmutableField):
+    @property
+    def avro_type(self) -> typing.Dict:
+        return field_utils.LOGICAL_TIMEDELTA
+
+    def default_to_avro(self, delta: datetime.timedelta) -> float:
+        """
+        Arguments:
+            timedelta (datetime.timedelta)
+
+        Returns:
+            float
+        """
+        return delta.total_seconds()
+
+    def fake(self) -> datetime.timedelta:
+        return fake.time_delta()
+
+
+@dataclasses.dataclass
 class TimeMilliField(ImmutableField):
     """
     The time-millis logical type represents a time of day,
@@ -1041,7 +1066,6 @@ def field_factory(
             f"Type {native_type} for field {name} is unknown. Please check the valid types at "
             "https://marcosschroh.github.io/dataclasses-avroschema/fields_specification/#avro-field-and-python-types-summary"  # noqa: E501
         )
-
         raise ValueError(msg)
 
 

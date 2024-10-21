@@ -35,6 +35,7 @@ CONTAINER_FIELDS_CLASSES = {
 LOGICAL_TYPES_FIELDS_CLASSES = {
     datetime.date: fields.DateField,
     datetime.time: fields.TimeMilliField,
+    datetime.timedelta: fields.TimedeltaField,
     types.TimeMicro: fields.TimeMicroField,
     datetime.datetime: fields.DatetimeField,
     types.DateTimeMicro: fields.DatetimeMicroField,
